@@ -1,0 +1,12 @@
+# pip installs
+
+Flask
+Flask-WTF
+Flask-SQLAlchemy
+Flask-Migrate
+Python-dotenv
+psycopg2
+email_validator
+
+
+# pip install -r requirements.txt
