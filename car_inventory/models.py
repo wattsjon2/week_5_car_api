@@ -9,10 +9,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # import for secrets module (given by python)
 import secrets 
 
+from flask_login import LoginManager, UserMixin
+from flask_marshmallow import Marshmallow
+
 db = SQLAlchemy()
+login_manager = LoginManager()
+ma = Marshmallow()
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.String, primary_key = True)
     first_name = db.Column(db.String(150), nullable = True, default = '')
     last_name = db.Column(db.String(150), nullable = True, default = '')
@@ -43,3 +51,33 @@ class User(db.Model):
 
     def __repr__(self):
         return f'User {self.email} has been added to the Database'
+
+class Car(db.Model): #change all this up
+    id = db.Column(db.String, primary_key = True)
+    make = db.Column(db.String(150))
+    model = db.Column(db.String(150))
+    year = db.Column(db.String(150))
+    description = db.Column(db.String(250), nullable = True)
+    user_token = db.Column(db.String, db.ForeignKey('user.token'), nullable = False)
+
+    def __init__(self, make, model, year, description, user_token, id = ""):
+        self.id = self.set_id()
+        self.make = make
+        self.model = model
+        self.year = year
+        self.description = description
+        self.user_token = user_token
+
+    def set_id(self):
+        return secrets.token_urlsafe()
+
+    def __repr__(self):
+        return f'The following car has been created: {self.name}'
+
+
+# creation of API schema via the marshmallow object
+class CarSchema(ma.Schema):
+        fields = ['id','name','description','price','camera_quality','flight_time','max_speed','dimensions','weight','cost_of_productions','series']
+
+car_schema = CarSchema()
+cars_schema = CarSchema(many = True)        
