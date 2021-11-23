@@ -14,7 +14,7 @@ def getdata(current_user_token):
 # create car route
 @api.route('/cars', methods = ['POST'])
 @token_required
-def create_drone(current_user_token):
+def create_car(current_user_token):
     make = request.json['make']
     model = request.json['model']
     year = request.json['year']
@@ -29,7 +29,7 @@ def create_drone(current_user_token):
 
 @api.route('/cars', methods = ['GET'])
 @token_required
-def get_drones(current_user_token):
+def get_cars(current_user_token):
     owner = current_user_token.token
     cars = Car.query.filter_by(user_token = owner).all()
     response = cars_schema.dump(cars)
@@ -37,7 +37,7 @@ def get_drones(current_user_token):
 
 @api.route('/cars/<id>', methods = ['GET'])
 @token_required
-def get_drone(current_user_token, id):
+def get_car(current_user_token, id):
     owner = current_user_token.token
     if owner == current_user_token.token:
         car = Car.query.get(id)
@@ -48,7 +48,7 @@ def get_drone(current_user_token, id):
 
 @api.route('/cars/<id>', methods = ['POST','PUT'])
 @token_required
-def update_drone(current_user_token, id):
+def update_car(current_user_token, id):
     car = Car.query.get(id) #Get the drone instance
 
     car.make = request.json['make']
@@ -63,7 +63,7 @@ def update_drone(current_user_token, id):
 
 @api.route('cars/<id>', methods = ['DELETE'])
 @token_required
-def delete_drone(current_user_token, id):
+def delete_car(current_user_token, id):
     car = Car.query.get(id)
     db.session.delete(car)
     db.session.commit()

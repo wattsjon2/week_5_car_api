@@ -77,7 +77,8 @@ class Car(db.Model): #change all this up
 
 # creation of API schema via the marshmallow object
 class CarSchema(ma.Schema):
-        fields = ['id','name','description','price','camera_quality','flight_time','max_speed','dimensions','weight','cost_of_productions','series']
+    class Meta:
+        fields = ['id','make','model','year','description']
 
 car_schema = CarSchema()
 cars_schema = CarSchema(many = True)        
